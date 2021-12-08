@@ -2,7 +2,7 @@
 
 using namespace Audio;
 
-Streamer::Streamer(std::string device) :
+Streamer::Streamer(const std::string& device) :
     m_recorder(
         AudioSettings(
             device,

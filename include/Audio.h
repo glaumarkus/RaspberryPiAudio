@@ -10,7 +10,7 @@ namespace Audio {
 class Streamer
 {
 public:
-    Streamer(std::string device);
+    Streamer(const std::string& device);
     ~Streamer();
 
     void Start();

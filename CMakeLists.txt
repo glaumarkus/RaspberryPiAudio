@@ -44,8 +44,8 @@ target_link_libraries(${TARGET} -lpthread -lm)
 
 
 # create test app
-add_executable(Test test.cpp)
-target_link_libraries(Test LINK_PUBLIC ${TARGET})
+# add_executable(Test test.cpp)
+# target_link_libraries(Test LINK_PUBLIC ${TARGET})
 
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})

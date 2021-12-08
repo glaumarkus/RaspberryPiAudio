@@ -27,7 +27,7 @@
 #include "tsqueue.h"
 
 // #define CHECK_LEVEL
-#define CHECK_FFT_OUTPUT
+// #define CHECK_FFT_OUTPUT
 
 namespace Audio {
 

@@ -2,6 +2,15 @@
 
 int main()
 {
+
+    Audio::Streamer streamer("hw:1,0");
+    auto& stream = streamer.GetFFTSamples();
+
+    streamer.Start();
+    std::this_thread::sleep_for(std::chrono::seconds(60));
+    streamer.Stop();
+
+    /*
     // Audio Capture Settings
     Audio::AudioSettings settings
     {
@@ -34,7 +43,7 @@ int main()
             processor.Start();
         }
     );
-
+    
     // wait
     std::this_thread::sleep_for(std::chrono::seconds(60));
 
@@ -47,6 +56,7 @@ int main()
         reader.join();
     if (fft_thread.joinable())
         fft_thread.join();
+    */
 
     return 0;
 

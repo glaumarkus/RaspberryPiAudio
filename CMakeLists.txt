@@ -17,6 +17,7 @@ set(SRC_FILES
 ${PROJECT_SOURCE_DIR}/src/recorder.cpp
 ${PROJECT_SOURCE_DIR}/src/fft_processor.cpp
 ${PROJECT_SOURCE_DIR}/dependencies/kissfft/kiss_fft.c
+${PROJECT_SOURCE_DIR}/src/Audio.cpp
 )
 
 set(TARGET AudioLib)

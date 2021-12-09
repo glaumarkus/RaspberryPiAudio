@@ -8,7 +8,7 @@ Streamer::Streamer(const std::string& device) :
             device,
             Audio::BUFFER_SIZE,
             Audio::SAMPLE_RATE,
-            2
+            1
         )
     ),
     m_fft(m_recorder.getStream())

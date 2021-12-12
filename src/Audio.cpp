@@ -14,7 +14,8 @@ Streamer::Streamer(const std::string& device) :
     m_fft(m_recorder.getStream())
 {
     if (!m_recorder.setup())
-        throw("[ERROR]: Setting up audio device failed, program exits!\n");
+        throw std::runtime_error("[ERROR]: Audio device does not exist or wrong parameters, program exits!\n");
+
 }
 
 Streamer::~Streamer()

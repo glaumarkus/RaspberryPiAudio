@@ -18,6 +18,8 @@ public:
 
     tsqueue<sample_block>& GetFFTSamples();
 
+    A_Recorder::State GetState() const { return m_recorder.GetState(); }
+
 private:
 
     // stop condition

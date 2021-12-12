@@ -13,21 +13,37 @@ AudioSettings::AudioSettings(const std::string& device, std::size_t buffer_size,
 
 A_Recorder::A_Recorder(const AudioSettings& settings) :
     m_settings(settings),
-    m_recordingformat(SND_PCM_FORMAT_S16_LE)
+    //m_recordingformat(SND_PCM_FORMAT_S32_LE)
+    m_recordingformat(SND_PCM_FORMAT_S16_LE),
+    m_state(State::notInitialized)
 {}
 
 
 A_Recorder::~A_Recorder()
-{   
+{}
+
+A_Recorder::State A_Recorder::GetState() const
+{
+    return m_state;
+}
+
+void A_Recorder::FreeResources()
+{
     // free params
     snd_pcm_hw_params_free (m_hwparams);
 
     // free handle
     snd_pcm_close (m_handle);
+
+    // update global config
+    snd_config_update_free_global();
+
 }
 
 void A_Recorder::Start()
 {
+    m_state = State::Running;
+
     // keep running untill other thread tells to stop
     while (!m_stop.load(std::memory_order_relaxed))
     {
@@ -37,6 +53,8 @@ void A_Recorder::Start()
         // if ret not complete buffer stop
         if (ret != m_settings.buffer_size)
         {
+            // update state
+            m_state = State::notInitialized;
             std::cout << "Recording stoped, unvalid read size\n";
             break;
         }
@@ -50,11 +68,16 @@ void A_Recorder::Start()
             
         m_tsbuffer.push_back(data);
     }
+
+    FreeResources();
+
 }
 
 void A_Recorder::Stop()
 {
     m_stop = true;
+    // update state
+    m_state = State::notInitialized;
 }
 
 bool A_Recorder::setup()
@@ -97,6 +120,9 @@ bool A_Recorder::setup()
 
     // prepare buffer
     m_buffervec.resize(m_settings.buffer_size);
+
+    // 
+    m_state = State::Initialized;
 
     return true;
 }

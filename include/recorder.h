@@ -23,15 +23,23 @@ struct AudioSettings
 class A_Recorder : std::enable_shared_from_this<A_Recorder>
 {
 public:
+
+  enum class State : uint8_t
+  {
+    notInitialized,
+    Initialized,
+    Running
+  };
   
   A_Recorder(const AudioSettings& settings);
 
   ~A_Recorder();
   
   bool setup();
-
   void Start();
   void Stop();
+
+  State GetState() const;
 
   tsqueue<sample_block>& getStream();
 
@@ -39,6 +47,9 @@ public:
 
 private:
   
+  void FreeResources();
+
+  State m_state;
   
   std::atomic<bool> m_stop {false}; 
   std::vector<s16> m_buffervec;

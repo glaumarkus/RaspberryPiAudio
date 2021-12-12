@@ -39,7 +39,7 @@ typedef std::vector<sample> sample_block;
 constexpr int   SAMPLE_RATE = 44100;
 constexpr int   BUFFER_SIZE = 1024;
 constexpr int   BUFFER_SIZE_HALF = BUFFER_SIZE / 2;
-constexpr float FFT_DIVISOR = 5;
+constexpr float FFT_DIVISOR = 8.f;
 constexpr float FFT_DB_SCALER = 15.0f;
 
 }

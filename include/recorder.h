@@ -1,6 +1,7 @@
 #pragma once
 
 #include "common.h"
+#include "configreader.h"
 
 
 namespace Audio
@@ -10,17 +11,17 @@ namespace Audio
 
 struct AudioSettings
 {
-  AudioSettings(const std::string& device, std::size_t buffer_size, unsigned int framerate, std::size_t channels);
+  AudioSettings(const std::string& device, std::size_t buffer_size, unsigned int sample_rate, std::size_t channels);
 
   std::string device;
   std::size_t channels;
   std::size_t buffer_size;
-  unsigned int framerate;
+  unsigned int sample_rate;
 };
 
 
 
-class A_Recorder : std::enable_shared_from_this<A_Recorder>
+class Recorder 
 {
 public:
 
@@ -31,9 +32,9 @@ public:
     Running
   };
   
-  A_Recorder(const AudioSettings& settings);
+  Recorder(const AudioConfiguration& config);
 
-  ~A_Recorder();
+  ~Recorder();
   
   bool setup();
   void Start();
@@ -67,12 +68,4 @@ private:
 };
 
 
-
-
-
-
-
-
 }
-
-

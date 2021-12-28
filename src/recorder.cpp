@@ -3,31 +3,31 @@
 using namespace Audio;
 
 
-AudioSettings::AudioSettings(const std::string& device, std::size_t buffer_size, unsigned int framerate, std::size_t channels) :
+AudioSettings::AudioSettings(const std::string& device, std::size_t buffer_size, unsigned int sample_rate, std::size_t channels) :
   device(device),
   buffer_size(buffer_size),
-  framerate(framerate),
+  sample_rate(sample_rate),
   channels(channels)
 {}
 
 
-A_Recorder::A_Recorder(const AudioSettings& settings) :
-    m_settings(settings),
+Recorder::Recorder(const AudioConfiguration& config) :
+    m_settings(AudioSettings( config.device, config.buffer_size, config.sample_rate, config.channels)),
     //m_recordingformat(SND_PCM_FORMAT_S32_LE)
     m_recordingformat(SND_PCM_FORMAT_S16_LE),
     m_state(State::notInitialized)
 {}
 
 
-A_Recorder::~A_Recorder()
+Recorder::~Recorder()
 {}
 
-A_Recorder::State A_Recorder::GetState() const
+Recorder::State Recorder::GetState() const
 {
     return m_state;
 }
 
-void A_Recorder::FreeResources()
+void Recorder::FreeResources()
 {
     // free params
     snd_pcm_hw_params_free (m_hwparams);
@@ -40,7 +40,7 @@ void A_Recorder::FreeResources()
 
 }
 
-void A_Recorder::Start()
+void Recorder::Start()
 {
     m_state = State::Running;
 
@@ -73,14 +73,14 @@ void A_Recorder::Start()
 
 }
 
-void A_Recorder::Stop()
+void Recorder::Stop()
 {
     m_stop = true;
     // update state
     m_state = State::notInitialized;
 }
 
-bool A_Recorder::setup()
+bool Recorder::setup()
 {
     // open audio device
     if ( snd_pcm_open (&m_handle, m_settings.device.c_str(), SND_PCM_STREAM_CAPTURE, 0) < 0)
@@ -103,7 +103,7 @@ bool A_Recorder::setup()
         return false;
 
     // set sample rate
-    if ( snd_pcm_hw_params_set_rate_near (m_handle, m_hwparams, &m_settings.framerate, 0) < 0)
+    if ( snd_pcm_hw_params_set_rate_near (m_handle, m_hwparams, &m_settings.sample_rate, 0) < 0)
         return false;
 
     // set num channels
@@ -121,13 +121,13 @@ bool A_Recorder::setup()
     // prepare buffer
     m_buffervec.resize(m_settings.buffer_size);
 
-    // 
+    // set state
     m_state = State::Initialized;
 
     return true;
 }
 
-tsqueue<sample_block>& A_Recorder::getStream()
+tsqueue<sample_block>& Recorder::getStream()
 {
     return m_tsbuffer;
 }

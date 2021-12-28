@@ -2,16 +2,9 @@
 
 using namespace Audio;
 
-Streamer::Streamer(const std::string& device) :
-    m_recorder(
-        AudioSettings(
-            device,
-            Audio::BUFFER_SIZE,
-            Audio::SAMPLE_RATE,
-            1
-        )
-    ),
-    m_fft(m_recorder.getStream())
+Streamer::Streamer(const AudioConfiguration& config) :
+    m_recorder(config),
+    m_fft(config, m_recorder.getStream())
 {
     if (!m_recorder.setup())
         throw std::runtime_error("[ERROR]: Audio device does not exist or wrong parameters, program exits!\n");
@@ -22,6 +15,7 @@ Streamer::~Streamer()
 {
     m_recorder.Stop();
     m_fft.Stop();
+
     if (m_recordingThread.joinable())
         m_recordingThread.join();
     if (m_processingThread.joinable())

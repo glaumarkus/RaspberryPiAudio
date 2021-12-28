@@ -36,6 +36,7 @@ typedef int16_t s16;
 typedef float sample;
 typedef std::vector<sample> sample_block;
 
+// replace
 constexpr int   SAMPLE_RATE = 44100;
 constexpr int   BUFFER_SIZE = 1024;
 constexpr int   BUFFER_SIZE_HALF = BUFFER_SIZE / 2;

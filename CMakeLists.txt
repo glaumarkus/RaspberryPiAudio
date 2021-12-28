@@ -14,10 +14,11 @@ enable_testing()
 
 set(SRC_FILES 
 # audio
+${PROJECT_SOURCE_DIR}/src/configreader.cpp
 ${PROJECT_SOURCE_DIR}/src/recorder.cpp
 ${PROJECT_SOURCE_DIR}/src/fft_processor.cpp
-${PROJECT_SOURCE_DIR}/dependencies/kissfft/kiss_fft.c
 ${PROJECT_SOURCE_DIR}/src/Audio.cpp
+${PROJECT_SOURCE_DIR}/dependencies/kissfft/kiss_fft.c
 )
 
 set(TARGET AudioLib)
@@ -43,9 +44,18 @@ endif(ALSA_FOUND)
 target_link_libraries(${TARGET} -lpthread -lm)
 
 
+
 # create test app
-# add_executable(Test test.cpp)
-# target_link_libraries(Test LINK_PUBLIC ${TARGET})
+add_executable(Test test.cpp)
+
+target_include_directories( 
+Test PUBLIC
+${PROJECT_SOURCE_DIR}/include
+${PROJECT_SOURCE_DIR}/dependencies/kissfft
+)
+
+target_link_libraries(Test ${TARGET})
+
 
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})

@@ -17,7 +17,7 @@ struct AudioConfiguration
     bool LoadConfig(const std::string& path);
 
     std::string device = "";
-    uint8_t channels = 0;
+    size_t channels = 0;
     uint32_t sample_rate = 0;
     uint32_t buffer_size = 0;
     double magnitude_divisor = 0;

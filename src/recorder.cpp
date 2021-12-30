@@ -84,39 +84,65 @@ bool Recorder::setup()
 {
     // open audio device
     if ( snd_pcm_open (&m_handle, m_settings.device.c_str(), SND_PCM_STREAM_CAPTURE, 0) < 0)
+    {
+        std::cerr << "[ERROR]: Open audio device failed!\n";
         return false;
-    
+    }
+        
     // allocate hw parameter structure
     if ( snd_pcm_hw_params_malloc (&m_hwparams) < 0)
+    {
+        std::cerr << "[ERROR]: hw param allocation failed!\n";
         return false;
-    
+    }
     // initialize hw param structure
     if ( snd_pcm_hw_params_any (m_handle, m_hwparams) < 0)
+    {
+        std::cerr << "[ERROR]: hw param init failed!\n";
         return false;
+    }
     
     // set hw access
     if ( snd_pcm_hw_params_set_access (m_handle, m_hwparams, SND_PCM_ACCESS_RW_INTERLEAVED) < 0)
+    {
+        std::cerr << "[ERROR]: hw acces failed!\n";
         return false;
+    }
     
     // set hw format
     if ( snd_pcm_hw_params_set_format (m_handle, m_hwparams, m_recordingformat) < 0)
+    {
+        std::cerr << "[ERROR]: invaild recording format provided!\n";
         return false;
+    }
 
     // set sample rate
     if ( snd_pcm_hw_params_set_rate_near (m_handle, m_hwparams, &m_settings.sample_rate, 0) < 0)
+    {
+        std::cerr << "[ERROR]: invalid sample rate provided!\n";
         return false;
+    }
 
     // set num channels
     if ( snd_pcm_hw_params_set_channels (m_handle, m_hwparams, m_settings.channels) < 0)
+    {
+        std::cerr << "[ERROR]: unsupported channel count provided!\n";
         return false;
+    }
 
     // set hw params
     if ( snd_pcm_hw_params (m_handle, m_hwparams) < 0)
+    {
+        std::cerr << "[ERROR]: setting hw params failed!\n";
         return false;
+    }
     
     // prepare handle
     if ( snd_pcm_prepare (m_handle) < 0)
+    {
+        std::cerr << "[ERROR]: handle preparation failed!\n";
         return false;
+    }
 
     // prepare buffer
     m_buffervec.resize(m_settings.buffer_size);

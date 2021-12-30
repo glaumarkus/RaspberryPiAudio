@@ -18,13 +18,16 @@ int main()
     // do some math beforehand
     auto& processor = streamer.GetProcessor();
     float hz_step = processor.GetHzPerStep();
+    auto max_hz = processor.GetMaxHz();
+    std::cout << "Max Frequency: " << max_hz << "\tResoltion: " << hz_step << std::endl;
+    std::cout << "FPS: " << static_cast<float>(cc.sample_rate) / cc.buffer_size << "\n";
     bool cond = true;
 
     // start streamer with endpoint
     streamer.Start();
-    auto run_until = std::chrono::system_clock::now() + std::chrono::seconds(10);
+    auto run_until = std::chrono::system_clock::now() + std::chrono::seconds(2);
 
-    while (std::chrono::system_clock::now() != run_until)
+    while (std::chrono::system_clock::now() < run_until)
     {
         // wait for samples
         stream.wait();
@@ -36,6 +39,8 @@ int main()
     }
 
     streamer.Stop();
+
+    std::cout << "Exiting...\n";
 
 
     return 0;
